@@ -1,0 +1,7 @@
+{
+  "KeywordPrompt": "work as a marketing specialist create the best {Placeholder}keywords for the best seo performance",
+  "Prompts": [
+    "Then create a html-title not longer than 50 characters including this keywords, then write a very good meta description not longer than 160 characters and do not forget that it should correspond to googles expectations for the following text.","Use the keywords generated in the previous task to rewrite the following text, pay attention not to do keyword-stuffing, furthermore, you should structure the text better, optimize it for SEO, improve readability and identify the target group from the text and adapt it further. The output should be Title, Keywords, MetaDescription and Result for the optimized text. for the following text:", "And put the output in a json object, the properties should be strings and named Keywords, Title, MetaDesciption and Result"
+  ],
+  "SystemPrompt": "You are a helpful assistant designed to output JSON."
+}

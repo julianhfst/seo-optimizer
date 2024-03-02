@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/site.css" />
+  </head>
+
+  <body>
+    <main>
+      <div class="container">
+        <div style="width: 100%">
+          <a href="index.html"
+            ><button id="submit" type="button" class="backbutton">
+              zurück
+            </button></a
+          >
+        </div>
+        <div class="section sec">
+          <span class="input-title">Titel:</span>
+          <textarea id="content-title" name="content-title" rows="1" cols="35">
+{Title}</textarea
+          >
+          <div class="bottom-copy copy-button">
+            kopieren
+            <img src="svg/copy-icon.svg" alt="Copy" width="17" height="18" />
+          </div>
+        </div>
+        <div class="section-row">
+          <div class="section-element sec">
+            <span class="input-title">Keywords:</span>
+            <textarea
+              id="content-small"
+              name="content-small"
+              rows="1"
+              cols="35"
+            >
+{Keywords}</textarea
+            >
+            <div class="bottom-copy copy-button">
+              kopieren
+              <img src="svg/copy-icon.svg" alt="Copy" width="17" height="18" />
+            </div>
+          </div>
+          <div class="section-element sec">
+            <span class="input-title">Meta Description:</span>
+            <textarea
+              id="content-small"
+              name="content-small"
+              rows="10"
+              cols="35"
+            >
+{MetaDescription}</textarea
+            >
+            <div class="bottom-copy copy-button">
+              kopieren
+              <img src="svg/copy-icon.svg" alt="Copy" width="17" height="18" />
+            </div>
+          </div>
+        </div>
+        <div class="section sec">
+          <span class="input-title">Ergebnis:</span>
+          <textarea
+            id="content-medium"
+            name="content-medium"
+            rows="10"
+            cols="35"
+          >
+{Result}</textarea
+          >
+          <div class="bottom-copy copy-button">
+            kopieren
+            <img src="svg/copy-icon.svg" alt="Copy" width="17" height="18" />
+          </div>
+        </div>
+      </div>
+    </main>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        let copyButtons = document.querySelectorAll(".copy-button");
+
+        copyButtons.forEach(function (copyButton) {
+          copyButton.addEventListener("click", function () {
+            // Finde das spezifische Label für jedes Copy-Element
+            let textarea = copyButton.closest(".sec").querySelector("textarea");
+
+            // Selektiere das Textarea-Element (das Label)
+            textarea.select();
+
+            // Kopiere den ausgewählten Text in die Zwischenablage (mit Clipboard API)
+            navigator.clipboard
+              .writeText(textarea.value)
+              .then(function () {
+                // Ändere den Text des Copy-Buttons zu "Copied"
+                copyButton.textContent = "Copied";
+
+                // Ändere das Bild im Copy-Button zu "copy-icon.svg"
+                let copyIcon = document.createElement("img");
+                copyIcon.src = "svg/copy-icon.svg";
+                copyIcon.alt = "Copy";
+                copyIcon.width = 17;
+                copyIcon.height = 18;
+
+                // Ersetze den Inhalt des Copy-Buttons mit dem Bild
+                copyButton.innerHTML = "Copied ";
+                copyButton.appendChild(copyIcon);
+
+                // Füge eine visuelle Rückmeldung hinzu (optional)
+                copyButton.classList.add("active");
+                setTimeout(function () {
+                  copyButton.classList.remove("active");
+                  copyButton.textContent = "Copy"; // Setze den Text zurück
+                  // Setze das Bild zurück (optional, wenn es geändert wurde)
+                  copyButton.innerHTML =
+                    'Copy <img src="svg/copy-icon.svg" alt="Copy" width="17" height="18">';
+                }, 2500);
+              })
+              .catch(function (err) {
+                console.error("Unable to copy text", err);
+              });
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

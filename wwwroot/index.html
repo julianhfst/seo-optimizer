@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/site.css" />
+    <script
+      src="https://code.jquery.com/jquery-3.7.1.js"
+      integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <main>
+      <div class="container">
+        <div class="section">
+          <span class="input-title">Eingabe:</span>
+          <textarea id="content" name="content" rows="10" cols="35">
+Label</textarea
+          >
+          <div class="info-text">gewünschter Inhalt für die Optimierung</div>
+        </div>
+        <div class="section">
+          <span class="input-title">Optionen:</span>
+          <div class="checkbox-container">
+            <div class="checkbox">
+              <input
+                type="checkbox"
+                id="longtial"
+                name="longtail"
+                value="longtail"
+              />
+              <label for="longtail"
+                >Long Tail
+                <span class="tooltip"
+                  >Long-Tail-Keywords sind spezifische und weniger häufig
+                  gesuchte Suchbegriffe oder Phrasen, die ein genauer
+                  definiertes Interessengebiet ansprechen und oft eine höhere
+                  Konversionsrate in Suchmaschinenoptimierung und Marketing
+                  haben.</span
+                ><img src="svg/info-icon.svg" alt="info" width="17" height="18"
+              /></label>
+            </div>
+            <div class="checkbox">
+              <input type="checkbox" id="short" name="short" value="short" />
+              <label for="short"
+                >Head/Short
+                <span class="tooltip"
+                  >Head- oder Short-Keywords sind allgemeine, breit gefasste
+                  Suchbegriffe oder Phrasen, die oft von vielen Nutzern
+                  verwendet werden und eine hohe Wettbewerbsintensität in
+                  Suchmaschinenoptimierung und Marketing aufweisen.</span
+                ><img src="svg/info-icon.svg" alt="info" width="17" height="18"
+              /></label>
+            </div>
+            <div class="checkbox">
+              <input type="checkbox" id="lsi" name="lsi" value="lsi" />
+              <label for="lsi"
+                >LSI
+                <span class="tooltip"
+                  >LSI (Latent Semantic Indexing) Keywords sind semantisch
+                  verwandte Begriffe oder Phrasen, die inhaltlich mit dem
+                  Hauptthema eines Textes oder einer Webseite verbunden sind und
+                  von Suchmaschinen verwendet werden, um die Relevanz einer
+                  Seite für bestimmte Suchanfragen zu bestimmen.</span
+                ><img src="svg/info-icon.svg" alt="info" width="17" height="18"
+              /></label>
+            </div>
+            <div class="checkbox">
+              <input
+                type="checkbox"
+                id="related"
+                name="related"
+                value="related"
+              />
+              <label for="related"
+                >Related
+                <span class="tooltip">
+                  Related Keywords sind Begriffe oder Phrasen, die thematisch
+                  oder semantisch mit einem Haupt-Suchbegriff verbunden sind und
+                  oft von Suchmaschinen und SEO-Strategien genutzt werden, um
+                  die Relevanz und Vielfalt des Inhalts zu verbessern und die
+                  Sichtbarkeit in den Suchergebnissen zu erhöhen.</span
+                ><img src="svg/info-icon.svg" alt="info" width="17" height="18"
+              /></label>
+            </div>
+
+            <div class="checkbox">
+              <input
+                type="checkbox"
+                id="questionbased"
+                name="questionbased"
+                value="questionbased"
+              />
+              <label for="questionbased"
+                >Question Based
+                <span class="tooltip">
+                  Question-Based Keywords sind Suchbegriffe in Form von Fragen,
+                  die Nutzer verwenden, um spezifische Informationen zu erhalten
+                  und werden in Content-Marketing genutzt, um die Sichtbarkeit
+                  und Relevanz einer Webseite zu verbessern.</span
+                ><img src="svg/info-icon.svg" alt="info" width="17" height="18"
+              /></label>
+            </div>
+          </div>
+        </div>
+        <div class="section">
+          <button id="submit" type="button" class="button">
+            Generate
+            <img
+              class="loadingSpinner"
+              src="svg/loadingSpinner.svg"
+              style="display: none"
+              alt="Loading"
+              id="loadingSpinner"
+            />
+          </button>
+        </div>
+      </div>
+    </main>
+    <script>
+      let contentElement = document.getElementById("content");
+
+      const keywordTypes = {
+        longtail: 0,
+        lsi: 1,
+        related: 2,
+        questionbased: 3,
+        short: 4,
+      };
+
+      let keywordTypesArray = [];
+
+      document.querySelectorAll('[type="checkbox"]').forEach((item) => {
+        item.addEventListener("click", () => {
+          if (item.checked === true) {
+            keywordTypesArray.push(keywordTypes[item.value]);
+          } else if (item.checked === false) {
+            let index = keywordTypesArray.indexOf(keywordTypes[item.value]);
+            if (index !== -1) {
+              keywordTypesArray.splice(index, 1);
+            }
+          }
+          // console.log(keywordTypesArray);
+        });
+      });
+
+      function postRequest(content, types) {
+        let spinner = document.getElementById("loadingSpinner");
+        spinner.style.display = "inline";
+        $.ajax({
+          url: "https://localhost:7193/output",
+          type: "POST",
+          data: JSON.stringify({
+            content,
+            types,
+          }),
+          dataType: "html",
+          contentType: "application/json; charset=utf-8",
+          success: function (result) {
+            spinner.style.display = "none";
+            document.open();
+            document.write(result);
+            document.close();
+          },
+          error: function (xhr, ajaxOptions, thrownError) {
+            spinner.style.display = "none";
+            document.open();
+            document.write(xhr.responseText);
+            document.close();
+          }
+        });
+      }
+
+      document.getElementById("submit").addEventListener("click", () => {
+        postRequest(contentElement.value, keywordTypesArray);
+      });
+    </script>
+  </body>
+</html>
